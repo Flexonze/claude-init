@@ -1,10 +1,11 @@
 <div align="center">
 <br />
-  <strong>Made with ❤️ and ☕ by [Félix](https://github.com/Flexonze)</strong><br /><br />
+  <strong>Made with ❤️ and ☕ by <a href="https://github.com/Flexonze">Félix</a></strong><br /><br />
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Made for Claude Code](https://img.shields.io/badge/Made%20for-Claude%20Code-blueviolet)](https://code.claude.com)
 [![GitHub forks](https://img.shields.io/github/forks/Flexonze/claude-init)](https://github.com/Flexonze/claude-init/fork)
+
 </div>
 
 # /claude-init
