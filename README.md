@@ -36,7 +36,7 @@ This will analyze your project and generate a tailored `.claude/` directory with
 
 ## Note
 
-The commands and skills in this repo are opinionated and fit my own workflow. While `claude-init` tries to adapt them to any project, feel free to [fork this project](https://github.com/Flexonze/claude-init/fork) and make it your own.
+The commands and skills in this repo are opinionated and fit my own workflow. While `/claude-init` tries to adapt them to any project, feel free to [fork this project](https://github.com/Flexonze/claude-init/fork) and make it your own.
 
 ## License
 
