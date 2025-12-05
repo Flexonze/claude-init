@@ -1,0 +1,39 @@
+<div align="center">
+<br />
+  <strong>Made with ❤️ and ☕ by [Félix](https://github.com/Flexonze)</strong><br /><br />
+</div>
+
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Made for Claude Code](https://img.shields.io/badge/Made%20for-Claude%20Code-blueviolet)](https://code.claude.com)
+[![GitHub forks](https://img.shields.io/github/forks/Flexonze/claude-init)](https://github.com/Flexonze/claude-init/fork)
+
+# /claude-init
+
+Automatically generate a `.claude/` directory tailored for your project.
+
+## Usage
+
+```bash
+# First time only: Install the /claude-init command
+curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/claude-init.md -o ~/.claude/commands/claude-init.md
+
+# In your project directory:
+claude /claude-init
+
+# Or, if you like living on the edge (not recommended):
+claude --dangerously-skip-permissions /claude-init
+```
+
+This will analyze your project and generate a tailored `.claude/` directory with [custom slash commands](https://code.claude.com/docs/en/slash-commands#custom-slash-commands), CLAUDE.md, and skills.
+
+## Note
+
+The commands and skills in this repo are opinionated and fit my own workflow. While `claude-init` tries to adapt them to any project, feel free to [fork this project](https://github.com/Flexonze/claude-init/fork) and make it your own.
+
+## License
+
+[MIT](LICENSE)
+
+## How does it work?
+
+Magic.
