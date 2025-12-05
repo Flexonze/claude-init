@@ -1,11 +1,11 @@
 <div align="center">
 <br />
   <strong>Made with ❤️ and ☕ by [Félix](https://github.com/Flexonze)</strong><br /><br />
-</div>
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Made for Claude Code](https://img.shields.io/badge/Made%20for-Claude%20Code-blueviolet)](https://code.claude.com)
 [![GitHub forks](https://img.shields.io/github/forks/Flexonze/claude-init)](https://github.com/Flexonze/claude-init/fork)
+</div>
 
 # /claude-init
 
@@ -13,14 +13,21 @@ Automatically generate a `.claude/` directory tailored for your project.
 
 ## Usage
 
+First time only, install the `/claude-init` command:
+
 ```bash
-# First time only: Install the /claude-init command
 curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/claude-init.md -o ~/.claude/commands/claude-init.md
+```
 
-# In your project directory:
+In your project directory:
+
+```bash
 claude /claude-init
+```
 
-# Or, if you like living on the edge (not recommended):
+Or, if you like living on the edge (not recommended):
+
+```bash
 claude --dangerously-skip-permissions /claude-init
 ```
 
