@@ -14,10 +14,10 @@ Automatically generate a `.claude/` directory tailored for your project.
 
 ## Usage
 
-First time only, install the `/claude-init` command:
+Install the `/claude-init` command (first time only, Mac/Linux):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/claude-init.md -o ~/.claude/commands/claude-init.md
+mkdir -p ~/.claude/commands && curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/claude-init.md -o ~/.claude/commands/claude-init.md
 ```
 
 In your project directory:
