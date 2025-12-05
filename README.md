@@ -32,7 +32,7 @@ Or, if you like living on the edge (not recommended):
 claude --dangerously-skip-permissions /claude-init
 ```
 
-This will analyze your project and generate a tailored `.claude/` directory with [custom slash commands](https://code.claude.com/docs/en/slash-commands#custom-slash-commands), CLAUDE.md, and skills.
+This will analyze your project and generate a tailored `.claude/` directory with [custom slash commands](https://code.claude.com/docs/en/slash-commands#custom-slash-commands), [CLAUDE.md](https://www.claude.com/blog/using-claude-md-files), and [skills](https://code.claude.com/docs/en/skills#agent-skills).
 
 ## Note
 
