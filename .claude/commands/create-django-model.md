@@ -14,7 +14,7 @@ Create a new Django model named {{model_name}} following an opinionated checklis
 - `model-name-snake` - snake_case version (e.g., team_project)
 - `custom-instruction` - Any custom instructions (fields, etc.)
 
-**Example:** `/create-model e_coach TeamProject team_project`
+**Example:** `/create-model my_app TeamProject team_project`
 
 ## Instructions
 
