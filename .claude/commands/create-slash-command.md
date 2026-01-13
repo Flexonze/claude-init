@@ -29,4 +29,5 @@ Create a new slash command in `.claude/commands/` based on the user's input.
 - Use kebab-case for filenames (e.g., `my-command.md`)
 - Keep instructions clear and focused
 - Use frontmatter for `argument-hint` and `description` when relevant
-- Commands are immediately available after creation
+- If the command generates artifacts (diagrams, reports, markdown files, etc.), specify that outputs should be saved to `.claude/outputs/` directory (create if needed) unless specified otherwise
+
