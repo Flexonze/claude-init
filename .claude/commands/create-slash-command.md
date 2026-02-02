@@ -29,5 +29,8 @@ Create a new slash command in `.claude/commands/` based on the user's input.
 - Use kebab-case for filenames (e.g., `my-command.md`)
 - Keep instructions clear and focused
 - Use frontmatter for `argument-hint` and `description` when relevant
-- If the command generates artifacts (diagrams, reports, markdown files, etc.), specify that outputs should be saved to `.claude/outputs/` directory (create if needed) unless specified otherwise
+- If the command generates artifacts (diagrams, reports, markdown files, etc.):
+  - Output files should be saved to `.claude/outputs/` directory
+  - Create the directory with a .gitkeep if it doesn't exist: `mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep`
+  - Use descriptive filenames (e.g., `<command-name>-<context>.png`)
 

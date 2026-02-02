@@ -136,7 +136,17 @@ Step-by-step guidance for Claude to perform this task.
 Concrete examples of using this skill.
 ```
 
-### 4. Create CLAUDE.md
+### 4. Create Outputs Directory
+
+Create the `.claude/outputs/` directory with a `.gitkeep` file to track it in git while keeping it empty:
+
+```bash
+mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep
+```
+
+This folder is used by slash commands that generate artifacts (diagrams, reports, etc.).
+
+### 5. Create CLAUDE.md
 
 Fetch the CLAUDE.md template from the claude-init repository:
 
@@ -154,11 +164,12 @@ Using the project analysis from step 1, fill in the template:
 
 Write the filled-in template in CLAUDE.md in the project root.
 
-### 5. Report Results
+### 6. Report Results
 
 Print a summary:
 
 - What you detected about the project
 - Which commands were created
 - Which skills were created
+- Confirm `.claude/outputs/` directory was created
 - Confirm CLAUDE.md was created

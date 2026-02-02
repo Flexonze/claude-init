@@ -65,13 +65,13 @@ classDiagram
 
 ### 3. Generate the Diagram Image
 - Create a PNG image: `.claude/outputs/db-diagram-<feature-name>.png` (use kebab-case)
-- Create the `.claude/outputs/` directory if it doesn't exist
+- Create the `.claude/outputs/` directory with a `.gitkeep` if it doesn't exist
 - No temporary files needed - pipe directly to mermaid-cli
 
 #### Steps
 1. Pipe the Mermaid class diagram code directly to `npx @mermaid-js/mermaid-cli` using stdin:
    ```bash
-   mkdir -p .claude/outputs && cat << 'EOF' | npx -y @mermaid-js/mermaid-cli -i - -o .claude/outputs/db-diagram-<feature-name>.png
+   mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep && cat << 'EOF' | npx -y @mermaid-js/mermaid-cli -i - -o .claude/outputs/db-diagram-<feature-name>.png
    classDiagram
        class Project {
            name

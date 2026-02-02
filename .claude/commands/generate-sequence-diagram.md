@@ -64,13 +64,13 @@ sequenceDiagram
 
 ### 3. Generate the Diagram Image
 - Create an SVG image: `.claude/outputs/sequence-diagram-<feature-name>.svg` (use kebab-case)
-- Create the `.claude/outputs/` directory if it doesn't exist
+- Create the `.claude/outputs/` directory with a `.gitkeep` if it doesn't exist
 - Use SVG format for better scalability and readability
 
 #### Steps
 1. Pipe the Mermaid sequence diagram code directly to `npx @mermaid-js/mermaid-cli` using stdin:
    ```bash
-   mkdir -p .claude/outputs && cat << 'EOF' | npx -y @mermaid-js/mermaid-cli -i - -o .claude/outputs/sequence-diagram-<feature-name>.svg
+   mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep && cat << 'EOF' | npx -y @mermaid-js/mermaid-cli -i - -o .claude/outputs/sequence-diagram-<feature-name>.svg
    sequenceDiagram
        autonumber
 
