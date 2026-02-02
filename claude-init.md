@@ -152,7 +152,7 @@ Using the project analysis from step 1, fill in the template:
 - **Project structure**: A tree of key directories and their purpose
 - **Development guidelines**: Conventions, patterns, and practices used in the project
 
-Write the filled-in template to `.claude/CLAUDE.md`
+Write the filled-in template in CLAUDE.md in the project root.
 
 ### 5. Report Results
 
