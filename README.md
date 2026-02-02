@@ -12,13 +12,21 @@
 
 Automatically generate a `.claude/` directory tailored for your project.
 
-## Usage
+## Installation
 
-Install the `/claude-init` command (first time only, Mac/Linux):
+### Mac / Linux
 
 ```bash
-mkdir -p ~/.claude/commands && curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/claude-init.md -o ~/.claude/commands/claude-init.md
+curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/install.sh | bash
 ```
+
+### Windows (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/Flexonze/claude-init/main/install.ps1 | iex
+```
+
+## Usage
 
 In your project directory:
 
@@ -26,7 +34,7 @@ In your project directory:
 claude /claude-init
 ```
 
-Or, if you like living on the edge (not recommended):
+Or, if you don't want to approve each step:
 
 ```bash
 claude --dangerously-skip-permissions /claude-init
