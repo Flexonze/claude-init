@@ -40,7 +40,7 @@ Or, if you don't want to approve each step:
 claude --dangerously-skip-permissions /claude-init
 ```
 
-This will analyze your project and generate a `.claude/` directory with a [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory#claudemd), [skills](https://docs.anthropic.com/en/docs/claude-code/skills), [rules](https://docs.anthropic.com/en/docs/claude-code/memory#rules), etc.
+This will analyze your project and generate a `.claude/` directory with a [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory#claudemd), some [skills](https://docs.anthropic.com/en/docs/claude-code/skills), [rules](https://docs.anthropic.com/en/docs/claude-code/memory#rules), etc.
 
 ## Use a reference repository
 
