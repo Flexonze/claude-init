@@ -42,16 +42,14 @@ claude --dangerously-skip-permissions /claude-init
 
 This will analyze your project and generate a `.claude/` directory with a [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory#claudemd), some [skills](https://docs.anthropic.com/en/docs/claude-code/skills), [rules](https://docs.anthropic.com/en/docs/claude-code/memory#rules), etc.
 
-### Use a reference repository
+### Optionally, use a reference repository
 
-Optionally, provide a reference repository (URL or path) when generating the config:
+if you provide a reference repository (URL or path) when generating the config, the reference's skills, rules, CLAUDE.md, and other config files will be explored and used as inspiration when generating your config.
 
 ```bash
 claude /claude-init https://github.com/your-username/your-repo
 # or: claude /claude-init ~/path/to/your/project
 ```
-
-The reference's skills, rules, CLAUDE.md, and other config files will be explored and used as inspiration when generating your config.
 
 For example, you could provide [my personal collection of Claude Code configs](https://github.com/Flexonze/.claude) as reference.
 
