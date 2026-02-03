@@ -42,7 +42,7 @@ claude --dangerously-skip-permissions /claude-init
 
 This will analyze your project and generate a `.claude/` directory with a [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory#claudemd), some [skills](https://docs.anthropic.com/en/docs/claude-code/skills), [rules](https://docs.anthropic.com/en/docs/claude-code/memory#rules), etc.
 
-## Use a reference repository
+### Use a reference repository
 
 Optionally, provide a reference repository (URL or path) when generating the config:
 
