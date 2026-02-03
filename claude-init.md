@@ -118,7 +118,7 @@ For each skill:
 1. Read and understand what it does
 2. Check if a similar skill already exists (from reference or existing setup) - avoid duplicates
 3. Determine if it's relevant to this project
-4. If relevant, adapt it to fit the project (update examples, adjust to match how the project is run)
+4. If relevant, adapt it to fit the project (update examples, adjust to match how the project is run, etc.)
 5. Create the skill directory and write the adapted SKILL.md to `.claude/skills/<skill-name>/SKILL.md`
 
 #### Step B: Import skills from reference configuration (if loaded)
