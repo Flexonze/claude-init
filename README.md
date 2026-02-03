@@ -59,6 +59,10 @@ For example, you could provide [my personal collection of Claude Code configs](h
 claude /claude-init https://github.com/Flexonze/.claude
 ```
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
+
 ## License
 
 [MIT](LICENSE)
