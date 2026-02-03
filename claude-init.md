@@ -4,7 +4,7 @@ description: Generate a customized .claude/ directory for your project
 
 # Claude Init
 
-Analyze the current project and generate a customized `.claude/` directory with relevant slash commands.
+Analyze the current project and generate a customized `.claude/` directory with relevant skills.
 
 ## Instructions
 
@@ -20,11 +20,13 @@ Before generating the `.claude/` configuration, verify the project has enough co
 
 **If the project appears empty or has no README:**
 
-Inform the user that /Claude-init works best with an existing project that has some documentation and suggest creating a `README.md` with minimal information like a project name, description, stack, etc. Don't continue to step 2.
+Inform the user that /claude-init works best with an existing project that has some documentation and suggest creating a `README.md` with minimal information like a project name, description, stack, etc. Don't continue to step 2.
 
 **If a `.claude/` folder already exists:**
 
-Note what's already configured (existing commands, skills, CLAUDE.md). Throughout the following steps, complement rather than duplicate or overwrite the existing setup. Don't replace an existing CLAUDE.md, don't recreate commands that already exist, etc.
+Note what's already configured (existing commands, skills, CLAUDE.md). Throughout the following steps, complement rather than duplicate or overwrite the existing setup. Don't replace an existing CLAUDE.md, don't recreate skills that already exist, etc.
+
+> **Note on existing slash commands:** Some projects may have slash commands in `.claude/commands/`. These still work and don't need to be migrated. When creating new functionality, use skills instead.
 
 **If the project has basic documentation:**
 
@@ -43,55 +45,60 @@ Thoroughly explore the project to understand what it is and how it works:
 
 Create a brief summary of your findings.
 
-### 3. Create Custom Slash Commands
+### 3. Create Skills
 
-First, read the Claude slash commands documentation to understand how they work:
-https://code.claude.com/docs/en/slash-commands
+First, read the Claude skills documentation to understand how they work:
+https://code.claude.com/docs/en/skills
 
-Create the `.claude/commands/` directory if it doesn't exist.
+Create the `.claude/skills/` directory if it doesn't exist.
 
-#### Step A: Copy and adapt commands from claude-init repository
+#### Step A: Copy and adapt skills from claude-init repository
 
-Fetch the list of available commands:
-
-```bash
-curl -fsSL https://api.github.com/repos/Flexonze/claude-init/contents/.claude/commands
-```
-
-For each `.md` file, fetch its raw content:
+Fetch the list of available skills:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/commands/<filename>
+curl -fsSL https://api.github.com/repos/Flexonze/claude-init/contents/.claude/skills
 ```
 
-For each command:
+For each skill directory, fetch its SKILL.md:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/skills/<skill-name>/SKILL.md
+```
+
+For each skill:
 
 1. Read and understand what it does
-2. Determine if it's relevant (framework-specific commands only if the project uses that framework)
-3. If relevant, adapt it to fit the project (update examples, adjust commands to match how the project is run)
-4. Write the adapted command to `.claude/commands/<command-name>.md`
+2. Determine if it's relevant to this project
+3. If relevant, adapt it to fit the project (update examples, adjust to match how the project is run)
+4. Create the skill directory and write the adapted SKILL.md to `.claude/skills/<skill-name>/SKILL.md`
 
-#### Step B: Create additional project-specific commands
+#### Step B: Create additional project-specific skills
 
-Review the project's README and documentation for patterns that could work well as new slash commands.
+Review the project's README and documentation for patterns that could work well as new skills.
 
 **Look for things like:**
 
 - Common development tasks
 - Repetitive workflows
 - Project-specific operations
-- etc.
+- Build or compilation steps
+- Deployment procedures
+- Database migration processes
+- Testing procedures
+- Code generation steps
+- Any documented "how to" that's specific to this project
 
-**IMPORTANT: Avoid creating simple wrapper commands**
+**IMPORTANT: Avoid creating simple wrapper skills**
 
-Do NOT create slash commands that just run a single shell command. For example:
+Do NOT create skills that just run a single shell command. For example:
 - ❌ `/lint` that only runs `npm run lint`
 - ❌ `/test` that only runs `npm test`
 - ❌ `/build` that only runs `npm run build`
 
-These add no value - the developer could just run the command directly. Running `claude /lint` is harder than running `npm run lint`.
+These add no value - the developer could just run the command directly.
 
-**A valuable slash command should leverage Claude's intelligence by doing at least one of:**
+**A valuable skill should leverage Claude's intelligence by doing at least one of:**
 
 - **Multi-step workflows**: Automate sequences of related actions with decision points
 - **Contextual analysis**: Read and understand code/files before acting
@@ -107,88 +114,50 @@ These add no value - the developer could just run the command directly. Running 
 - ✅ `/debug-test [test-name]` - runs test, analyzes failure, reads related code, suggests fix
 - ✅ `/sync-translations` - runs the translation extraction command, then fills in missing keys matching existing tone/style
 
-**Ask yourself:** Would running this command through Claude provide more value than just running the shell command directly? If not, don't create it.
+**Ask yourself:** Would running this skill through Claude provide more value than just running the shell command directly? If not, don't create it.
 
-For each relevant pattern found, create a new custom command using this format:
+For each relevant pattern found, create a new skill using this format:
 
-```markdown
----
-argument-hint: [optional-args]
-description: Brief description of what this command does
----
-
-# Command Name
-
-Description of what the command does.
-
-## Instructions
-
-Step-by-step guidance for Claude to perform this task.
+```
+.claude/skills/<skill-name>/
+└── SKILL.md
 ```
 
-### 4. Create Skills
-
-First, read the Claude skills documentation to understand how they work:
-https://code.claude.com/docs/en/skills
-
-Skills teach Claude project-specific workflows. Create the `.claude/skills/` directory if skills are needed.
-
-#### Step A: Copy and adapt skills from claude-init repository
-
-Fetch the list of available skills:
-
-```bash
-curl -fsSL https://api.github.com/repos/Flexonze/claude-init/contents/.claude/skills
-```
-
-For each `.md` file, fetch its raw content:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/skills/<filename>
-```
-
-For each skill:
-
-1. Read and understand what it does
-2. Determine if it's relevant to this project
-3. If relevant, adapt it to fit the project
-4. Write the adapted skill to `.claude/skills/<skill-name>.md`
-
-#### Step B: Create additional project-specific skills
-
-Review the project's README and documentation for workflows that could become skills.
-
-**Look for things like:**
-
-- Build or compilation steps
-- Deployment procedures
-- Translation/localization workflows
-- Database migration processes
-- Testing procedures
-- Code generation steps
-- Any documented "how to" that's specific to this project
-- etc.
-
-For each relevant workflow found, create a new skill using this format:
+**SKILL.md format:**
 
 ```markdown
 ---
 name: skill-name
-description: Brief description of what this Skill does and when to use it
+description: Brief description of what this skill does and when to use it
+argument-hint: [optional-args]
+disable-model-invocation: true  # Add for action skills (deploy, generate, etc.)
+# allowed-tools: Bash(git *)    # Add if skill needs specific tools
 ---
 
 # Skill Name
+
+Description of what the skill does.
 
 ## Instructions
 
 Step-by-step guidance for Claude to perform this task.
 
+1. First step
+2. Second step
+3. Third step
+
 ## Examples
 
-Concrete examples of using this skill.
+- "Example prompt that would trigger this skill"
+- "Another example usage"
 ```
 
-### 5. Create Outputs Directory
+**Skill type guidelines:**
+
+- **Task skills** (actions with side effects like generating files, deploying, committing): Add `disable-model-invocation: true` so only the user can invoke them
+- **Reference skills** (knowledge/conventions Claude applies automatically): Leave invocation enabled (default)
+
+### 4. Create Outputs Directory
 
 Create the `.claude/outputs/` directory with a `.gitkeep` file to track it in git while keeping it empty:
 
@@ -196,7 +165,61 @@ Create the `.claude/outputs/` directory with a `.gitkeep` file to track it in gi
 mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep
 ```
 
-This folder is used by slash commands that generate artifacts (diagrams, reports, etc.).
+This folder is used by skills that generate artifacts (diagrams, reports, etc.).
+
+### 5. Create Rules
+
+Create the `.claude/rules/` directory with a `.gitkeep` file:
+
+```bash
+mkdir -p .claude/rules && touch .claude/rules/.gitkeep
+```
+
+Analyze the codebase for patterns that would make good rules. Rules are project-specific guidelines that Claude should follow when working on this codebase.
+
+**Look for patterns like:**
+
+- Naming conventions (files, variables, functions, classes)
+- Import ordering and organization
+- Error handling patterns
+- Testing conventions and patterns
+- Code style preferences
+- Architecture patterns (where to put certain types of code)
+- API design patterns
+- Documentation conventions
+
+**For each significant pattern found:**
+
+1. Create a rule file in `.claude/rules/` with a descriptive name (e.g., `naming-conventions.md`, `error-handling.md`)
+2. Document the pattern clearly with examples from the codebase
+3. Explain when and how to apply the pattern
+
+**Rule file format:**
+
+```markdown
+# Rule Name
+
+Brief description of the rule.
+
+## Pattern
+
+Describe the pattern or convention.
+
+## Examples
+
+Show examples from the codebase demonstrating the pattern.
+
+## When to Apply
+
+Explain when this rule should be followed.
+```
+
+**Guidelines for creating rules:**
+
+- Only create rules for patterns that are consistently applied in the codebase
+- Focus on patterns that would be non-obvious to someone new to the project
+- Keep rules concise and actionable
+- Include real examples from the codebase when possible
 
 ### 6. Create CLAUDE.md
 
@@ -221,7 +244,9 @@ Write the filled-in template in CLAUDE.md in the project root.
 Print a summary:
 
 - What you detected about the project
-- Which commands were created
 - Which skills were created
+- Which rules were created (if any)
+- Note any existing slash commands found (no migration needed)
 - Confirm `.claude/outputs/` directory was created
+- Confirm `.claude/rules/` directory was created
 - Confirm CLAUDE.md was created

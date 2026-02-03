@@ -1,6 +1,7 @@
 ---
-argument-hint: [feature-name]
+name: prime
 description: Get a general understanding of the codebase (stack, key files, structure, etc) and/or specific feature
+argument-hint: [feature-name]
 ---
 
 # Prime - Codebase Understanding

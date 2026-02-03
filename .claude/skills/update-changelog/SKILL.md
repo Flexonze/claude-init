@@ -1,6 +1,7 @@
 ---
 name: update-changelog
 description: Update the changelog based on commits in the current git branch
+allowed-tools: Bash(git *)
 ---
 
 # Update Changelog

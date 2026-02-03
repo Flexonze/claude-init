@@ -1,6 +1,9 @@
 ---
+name: generate-pr-description
+description: Generate PR title and description from git diff
 argument-hint: [parent-branch]
-description: Generate PR title and description
+disable-model-invocation: true
+allowed-tools: Bash(git *)
 ---
 
 # Generate PR Description
@@ -93,5 +96,3 @@ Users can now configure how and when they receive notifications.
 ### :memo: Notes
 - Requires running database migrations
 ```
-
----

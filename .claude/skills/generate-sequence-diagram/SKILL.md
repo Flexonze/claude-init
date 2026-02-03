@@ -1,11 +1,14 @@
 ---
+name: generate-sequence-diagram
+description: Generate sequence diagram for a feature
 argument-hint: [feature-name]
-description: Generate sequence diagram
+disable-model-invocation: true
+allowed-tools: Bash(npx *)
 ---
 
 # Generate Sequence Diagram
 
-Generate a simple Mermaid sequence diagram showing the flow of a feature: {{input}}
+Generate a simple Mermaid sequence diagram showing the flow of a feature: $ARGUMENTS
 
 ## Instructions
 

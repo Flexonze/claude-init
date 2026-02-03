@@ -1,11 +1,14 @@
 ---
+name: generate-db-diagram
+description: Generate database diagram for a feature
 argument-hint: [feature-name]
-description: Generate database diagram
+disable-model-invocation: true
+allowed-tools: Bash(npx *)
 ---
 
 # Generate Database Diagram
 
-Generate a Mermaid class diagram representing the database schema related to: {{input}}
+Generate a Mermaid class diagram representing the database schema related to: $ARGUMENTS
 
 ## Instructions
 
