@@ -8,7 +8,29 @@ Analyze the current project and generate a customized `.claude/` directory with 
 
 ## Instructions
 
-### 1. Understand the Current Project
+### 1. Check Project Readiness
+
+Before generating the `.claude/` configuration, verify the project has enough context to work with.
+
+**Check for:**
+
+- A `README.md` or `README` file
+- Source files in the directory
+- Project manifest files (package.json, requirements.txt, Cargo.toml, go.mod, etc.)
+
+**If the project appears empty or has no README:**
+
+Inform the user that /Claude-init works best with an existing project that has some documentation and suggest creating a `README.md` with minimal information like a project name, description, stack, etc. Don't continue to step 2.
+
+**If a `.claude/` folder already exists:**
+
+Note what's already configured (existing commands, skills, CLAUDE.md). Throughout the following steps, complement rather than duplicate or overwrite the existing setup. Don't replace an existing CLAUDE.md, don't recreate commands that already exist, etc.
+
+**If the project has basic documentation:**
+
+Continue to Step 2.
+
+### 2. Understand the Current Project
 
 Thoroughly explore the project to understand what it is and how it works:
 
@@ -21,7 +43,7 @@ Thoroughly explore the project to understand what it is and how it works:
 
 Create a brief summary of your findings.
 
-### 2. Create Custom Slash Commands
+### 3. Create Custom Slash Commands
 
 First, read the Claude slash commands documentation to understand how they work:
 https://code.claude.com/docs/en/slash-commands
@@ -43,6 +65,7 @@ curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/c
 ```
 
 For each command:
+
 1. Read and understand what it does
 2. Determine if it's relevant (framework-specific commands only if the project uses that framework)
 3. If relevant, adapt it to fit the project (update examples, adjust commands to match how the project is run)
@@ -53,6 +76,7 @@ For each command:
 Review the project's README and documentation for patterns that could work well as new slash commands.
 
 **Look for things like:**
+
 - Common development tasks
 - Repetitive workflows
 - Project-specific operations
@@ -75,7 +99,7 @@ Description of what the command does.
 Step-by-step guidance for Claude to perform this task.
 ```
 
-### 3. Create Skills
+### 4. Create Skills
 
 First, read the Claude skills documentation to understand how they work:
 https://code.claude.com/docs/en/skills
@@ -97,6 +121,7 @@ curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/s
 ```
 
 For each skill:
+
 1. Read and understand what it does
 2. Determine if it's relevant to this project
 3. If relevant, adapt it to fit the project
@@ -136,7 +161,7 @@ Step-by-step guidance for Claude to perform this task.
 Concrete examples of using this skill.
 ```
 
-### 4. Create Outputs Directory
+### 5. Create Outputs Directory
 
 Create the `.claude/outputs/` directory with a `.gitkeep` file to track it in git while keeping it empty:
 
@@ -146,7 +171,7 @@ mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep
 
 This folder is used by slash commands that generate artifacts (diagrams, reports, etc.).
 
-### 5. Create CLAUDE.md
+### 6. Create CLAUDE.md
 
 Fetch the CLAUDE.md template from the claude-init repository:
 
@@ -154,7 +179,7 @@ Fetch the CLAUDE.md template from the claude-init repository:
 curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/CLAUDE.md
 ```
 
-Using the project analysis from step 1, fill in the template:
+Using the project analysis from step 2, fill in the template:
 
 - **Project name**: The name of the project
 - **Project description**: Brief description of what the project does
@@ -164,7 +189,7 @@ Using the project analysis from step 1, fill in the template:
 
 Write the filled-in template in CLAUDE.md in the project root.
 
-### 6. Report Results
+### 7. Report Results
 
 Print a summary:
 
