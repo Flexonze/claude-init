@@ -44,7 +44,7 @@ This will analyze your project and generate a `.claude/` directory with a [CLAUD
 
 ### Optionally, use a reference repository
 
-if you provide a reference repository (URL or path) when generating the config, the reference's skills, rules, CLAUDE.md, and other config files will be explored and used as inspiration when generating your config. This is especially useful if you have your own workflows, custom skills, or coding conventions that you want to carry across projects.
+If you provide a reference repository, relevant Claude Code config files (skills, rules, CLAUDE.md, etc.) will be read and adapted to generate your project’s config. This is especially useful if you have your own workflows, custom skills, or coding conventions that you want to carry across projects.
 
 ```bash
 claude /claude-init https://github.com/your-username/your-repo
