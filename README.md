@@ -4,7 +4,7 @@
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Made for Claude Code](https://img.shields.io/badge/Made%20for-Claude%20Code-blueviolet)](https://code.claude.com)
-[![GitHub forks](https://img.shields.io/github/forks/Flexonze/claude-init)](https://github.com/Flexonze/claude-init/fork)
+[![GitHub stars](https://img.shields.io/github/stars/Flexonze/claude-init)](https://github.com/Flexonze/claude-init)
 
 </div>
 
@@ -42,9 +42,22 @@ claude --dangerously-skip-permissions /claude-init
 
 This will analyze your project and generate a tailored `.claude/` directory with [custom slash commands](https://code.claude.com/docs/en/slash-commands#custom-slash-commands), [CLAUDE.md](https://www.claude.com/blog/using-claude-md-files), and [skills](https://code.claude.com/docs/en/skills#agent-skills).
 
-## Note
+## Use a reference repository
 
-The commands and skills in this repo are opinionated and fit my own workflow. While `/claude-init` tries to adapt them to any project, feel free to [fork this project](https://github.com/Flexonze/claude-init/fork) and make it your own.
+Optionally, provide a reference repository (URL or path) when generating the config:
+
+```bash
+claude /claude-init https://github.com/your-username/your-repo
+# or: claude /claude-init ~/path/to/your/project
+```
+
+The reference's skills, rules, CLAUDE.md, and other config files will be explored and used as inspiration when generating your config.
+
+For example, you could provide [my personal collection of Claude Code configs](https://github.com/Flexonze/.claude) as reference.
+
+```bash
+claude /claude-init https://github.com/Flexonze/.claude
+```
 
 ## License
 

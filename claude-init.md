@@ -1,10 +1,11 @@
 ---
 description: Generate a customized .claude/ directory for your project
+argument-hint: [reference-repository]
 ---
 
 # Claude Init
 
-Analyze the current project and generate a customized `.claude/` directory with relevant skills.
+Analyze the current project and generate a comprehensive `.claude/` directory with skills, rules, and configuration that genuinely improves the developer workflow.
 
 ## Instructions
 
@@ -32,9 +33,43 @@ Note what's already configured (existing commands, skills, CLAUDE.md). Throughou
 
 Continue to Step 2.
 
-### 2. Understand the Current Project
+### 2. Load Reference Configuration (Optional)
 
-Thoroughly explore the project to understand what it is and how it works:
+**If `$1` is provided:**
+
+The reference argument can be:
+
+- A URL to a git repository (GitHub, GitLab, Bitbucket, or any git hosting platform)
+- A local file path to a project on the user's computer
+
+**Instructions:**
+
+1. Determine if the argument is a URL or a local path
+2. If it's a URL:
+   - Fetch or clone the repository contents
+   - If the request fails (404, private repo, network error), inform the user: "Could not access the reference repository. Please provide a valid public repository URL or a local path."
+   - Ask the user to provide a different reference or confirm they want to continue without one
+   - Do not proceed until a valid reference is accessible or the user chooses to skip
+3. If it's a local path:
+   - Read the contents directly from the filesystem
+   - If the path doesn't exist or is inaccessible, ask the user to provide a valid path or skip
+4. Explore the reference's `.claude/` directory and `CLAUDE.md` (if they exist)
+5. Read and understand:
+   - CLAUDE.md structure, sections, and content style
+   - Skills in `.claude/skills/` (read each SKILL.md to understand the user's preferred workflows)
+   - Rules in `.claude/rules/`
+   - Any other configuration patterns (hooks, agents, slash commands, etc.)
+6. Keep these findings as "reference configuration" to inform the rest of the process
+
+**If `$1` is not provided:**
+
+Skip to Step 3.
+
+### 3. Understand the Current Project
+
+Thoroughly explore the project to understand what it is and how it works. Be comprehensive in your analysis:
+
+**Core understanding:**
 
 - Read `README.md` and any documentation files
 - Explore the directory structure
@@ -43,18 +78,30 @@ Thoroughly explore the project to understand what it is and how it works:
 - Note any patterns or conventions used (naming, file organization, imports, etc.)
 - Understand the purpose of the project (web app, CLI tool, library, etc.)
 
+**Deep dive into patterns:**
+
+- Analyze testing patterns: How are tests structured? What testing frameworks are used? Are there fixtures, factories, or mocks?
+- Check CI/CD configuration: Look at `.github/workflows/`, `.gitlab-ci.yml`, `Jenkinsfile`, etc.
+- Review linting/formatting: Check for `.eslintrc`, `.prettierrc`, `ruff.toml`, `.editorconfig`, etc.
+- Analyze containerization: Look at `Dockerfile`, `docker-compose.yml`, Kubernetes configs
+- Check for API patterns: REST endpoints, GraphQL schemas, OpenAPI specs
+- Identify database patterns: ORM usage, migrations, seed data
+- Look at authentication/authorization: Auth middleware, permission systems
+- Analyze logging and error handling: How are errors structured? What logging library is used?
+- Check environment configuration: `.env.example`, config files, environment-specific settings
+
 Create a brief summary of your findings.
 
-### 3. Create Skills
+### 4. Create Skills
 
 First, read the Claude skills documentation to understand how they work:
 https://code.claude.com/docs/en/skills
 
-Create the `.claude/skills/` directory if it doesn't exist.
+Then, create the `.claude/skills/` directory if it doesn't exist.
 
-#### Step A: Copy and adapt skills from claude-init repository
+#### Step A: Copy and adapt skills from /claude-init repository
 
-Fetch the list of available skills:
+The /claude-init repository provides a few example skills that are generic enough and provide a good base for this new skills folder. Fetch the list of available skills:
 
 ```bash
 curl -fsSL https://api.github.com/repos/Flexonze/claude-init/contents/.claude/skills
@@ -69,32 +116,50 @@ curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/s
 For each skill:
 
 1. Read and understand what it does
-2. Determine if it's relevant to this project
-3. If relevant, adapt it to fit the project (update examples, adjust to match how the project is run)
-4. Create the skill directory and write the adapted SKILL.md to `.claude/skills/<skill-name>/SKILL.md`
+2. Check if a similar skill already exists (from reference or existing setup) - avoid duplicates
+3. Determine if it's relevant to this project
+4. If relevant, adapt it to fit the project (update examples, adjust to match how the project is run)
+5. Create the skill directory and write the adapted SKILL.md to `.claude/skills/<skill-name>/SKILL.md`
 
-#### Step B: Create additional project-specific skills
+#### Step B: Import skills from reference configuration (if loaded)
 
-Review the project's README and documentation for patterns that could work well as new skills.
+If a reference configuration was loaded in Step 2:
 
-**Look for things like:**
+1. For each skill from the reference, evaluate if it's applicable to the current project's tech stack
+2. Adapt applicable skills to fit the current project (update commands, paths, examples)
+3. Prioritize the user's preferred workflow patterns from their reference
+4. Create the adapted skills in `.claude/skills/<skill-name>/SKILL.md`
 
-- Common development tasks
-- Repetitive workflows
-- Project-specific operations
-- Build or compilation steps
-- Deployment procedures
-- Database migration processes
-- Testing procedures
-- Code generation steps
-- Any documented "how to" that's specific to this project
+#### Step C: Create additional project-specific skills
+
+Be creative and thorough in identifying automation opportunities. The goal is to create a comprehensive set of skills that genuinely save developers time and effort.
+
+**Think about the full development lifecycle:**
+
+- Coding: What repetitive code patterns could be automated?
+- Testing: What testing workflows would benefit from Claude's intelligence?
+- Code review: How could Claude help review code or prepare PRs?
+- Documentation: What documentation tasks could be streamlined?
+- Debugging: How could Claude help diagnose and fix issues?
+- Deployment: What deployment-related workflows exist?
+- Database: Are there migration, seeding, or schema tasks?
+- Refactoring: What common refactoring patterns exist in this codebase?
+- Etc. Be creative!
+
+**Look for project-specific opportunities:**
+
+- Review the project's README and documentation for documented workflows
+- Look at scripts in `package.json`, `Makefile`, or similar for complex multi-step processes
+- Check for any "how to" documentation that describes manual processes
+- Identify pain points that developers likely face repeatedly
 
 **IMPORTANT: Avoid creating simple wrapper skills**
 
 Do NOT create skills that just run a single shell command. For example:
-- ❌ `/lint` that only runs `npm run lint`
-- ❌ `/test` that only runs `npm test`
-- ❌ `/build` that only runs `npm run build`
+
+- `/lint` that only runs `npm run lint`
+- `/test` that only runs `npm test`
+- `/build` that only runs `npm run build`
 
 These add no value - the developer could just run the command directly.
 
@@ -106,15 +171,9 @@ These add no value - the developer could just run the command directly.
 - **Content generation**: Create meaningful output (diagrams, descriptions, reports)
 - **Orchestration**: Coordinate multiple tools with branching logic
 
-**Good examples:**
-- ✅ `/generate-pr-description` - analyzes git diff, identifies ticket numbers, formats according to conventions
-- ✅ `/create-django-model` - 9-step workflow: creates model, migration, tests, factory, admin, runs tests
-- ✅ `/refactor-component [name]` - analyzes component, identifies issues, suggests improvements, applies changes
-- ✅ `/add-api-endpoint [resource]` - creates route, controller, tests, updates docs, validates against OpenAPI spec
-- ✅ `/debug-test [test-name]` - runs test, analyzes failure, reads related code, suggests fix
-- ✅ `/sync-translations` - runs the translation extraction command, then fills in missing keys matching existing tone/style
-
 **Ask yourself:** Would running this skill through Claude provide more value than just running the shell command directly? If not, don't create it.
+
+**Aim for comprehensiveness:** Create a significant number of meaningful skills. A well-configured project might have 5-15+ skills that cover various aspects of the development workflow.
 
 For each relevant pattern found, create a new skill using this format:
 
@@ -130,7 +189,7 @@ For each relevant pattern found, create a new skill using this format:
 name: skill-name
 description: Brief description of what this skill does and when to use it
 argument-hint: [optional-args]
-disable-model-invocation: true  # Add for action skills (deploy, generate, etc.)
+disable-model-invocation: true # Add for command-only skills (deploy, generate, etc.)
 # allowed-tools: Bash(git *)    # Add if skill needs specific tools
 ---
 
@@ -157,7 +216,7 @@ Step-by-step guidance for Claude to perform this task.
 - **Task skills** (actions with side effects like generating files, deploying, committing): Add `disable-model-invocation: true` so only the user can invoke them
 - **Reference skills** (knowledge/conventions Claude applies automatically): Leave invocation enabled (default)
 
-### 4. Create Outputs Directory
+### 5. Create Outputs Directory
 
 Create the `.claude/outputs/` directory with a `.gitkeep` file to track it in git while keeping it empty:
 
@@ -167,7 +226,7 @@ mkdir -p .claude/outputs && touch .claude/outputs/.gitkeep
 
 This folder is used by skills that generate artifacts (diagrams, reports, etc.).
 
-### 5. Create Rules
+### 6. Create Rules
 
 Create the `.claude/rules/` directory with a `.gitkeep` file:
 
@@ -175,18 +234,32 @@ Create the `.claude/rules/` directory with a `.gitkeep` file:
 mkdir -p .claude/rules && touch .claude/rules/.gitkeep
 ```
 
-Analyze the codebase for patterns that would make good rules. Rules are project-specific guidelines that Claude should follow when working on this codebase.
+#### Import rules from reference configuration (if loaded)
 
-**Look for patterns like:**
+If a reference configuration was loaded in Step 2:
 
-- Naming conventions (files, variables, functions, classes)
-- Import ordering and organization
-- Error handling patterns
-- Testing conventions and patterns
-- Code style preferences
-- Architecture patterns (where to put certain types of code)
-- API design patterns
-- Documentation conventions
+1. Review each rule from the reference
+2. Import and adapt rules that apply to this project
+3. Merge with project-specific patterns discovered in Step 3
+
+#### Analyze the codebase for patterns
+
+Rules are project-specific guidelines that Claude should follow when working on this codebase. Be thorough in identifying patterns.
+
+**Look for patterns in these areas:**
+
+- **Code organization**: File/folder structure conventions, module boundaries
+- **Naming conventions**: Files, variables, functions, classes, database tables
+- **Import/export patterns**: Ordering, grouping, absolute vs relative paths
+- **Error handling**: How errors are structured, logged, and propagated
+- **Testing conventions**: Test file naming, structure, assertion styles, mocking patterns
+- **Code style**: Beyond what linters catch - architectural preferences, abstraction levels
+- **Git workflow**: Branch naming, commit message format, PR conventions
+- **Security patterns**: Input validation, authentication checks, sensitive data handling
+- **Performance guidelines**: Caching patterns, query optimization conventions
+- **API design**: Endpoint naming, response formats, versioning
+- **State management**: How state is organized and updated
+- **Component/module structure**: Standard patterns for new components
 
 **For each significant pattern found:**
 
@@ -220,8 +293,9 @@ Explain when this rule should be followed.
 - Focus on patterns that would be non-obvious to someone new to the project
 - Keep rules concise and actionable
 - Include real examples from the codebase when possible
+- Aim to create multiple meaningful rules if the codebase has clear patterns
 
-### 6. Create CLAUDE.md
+### 7. Create CLAUDE.md
 
 Fetch the CLAUDE.md template from the claude-init repository:
 
@@ -229,7 +303,15 @@ Fetch the CLAUDE.md template from the claude-init repository:
 curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/CLAUDE.md
 ```
 
-Using the project analysis from step 2, fill in the template:
+#### If a reference configuration was loaded:
+
+Use the reference CLAUDE.md structure as inspiration. Incorporate relevant sections and formatting from the user's preferred style.
+
+#### Fill in the template comprehensively:
+
+Using the project analysis from Step 3, create a thorough CLAUDE.md that includes:
+
+**Required sections:**
 
 - **Project name**: The name of the project
 - **Project description**: Brief description of what the project does
@@ -237,16 +319,35 @@ Using the project analysis from step 2, fill in the template:
 - **Project structure**: A tree of key directories and their purpose
 - **Development guidelines**: Conventions, patterns, and practices used in the project
 
-Write the filled-in template in CLAUDE.md in the project root.
+**Additional sections to include (if applicable):**
 
-### 7. Report Results
+- **Testing strategy**: How to run tests, testing conventions, what frameworks are used
+- **Environment setup**: Required environment variables, local setup steps, dependencies
+- **Common tasks**: Quick reference for frequent operations (starting the server, running migrations, etc.)
+- **Architecture overview**: Brief description of key architectural decisions and patterns
+- **Key conventions**: Most important coding conventions at a glance
+- **Troubleshooting**: Common issues and solutions (if discoverable from docs or config)
 
-Print a summary:
+Write the filled-in CLAUDE.md in the project root.
 
-- What you detected about the project
-- Which skills were created
-- Which rules were created (if any)
-- Note any existing slash commands found (no migration needed)
-- Confirm `.claude/outputs/` directory was created
-- Confirm `.claude/rules/` directory was created
-- Confirm CLAUDE.md was created
+### 8. Report Results
+
+Print a clean, structured summary:
+
+```
+✓ Claude Code configuration complete!
+
+---
+
+Thanks for using /claude-init! Please consider giving it a ⭐ on GitHub:
+https://github.com/Flexonze/claude-init
+
+---
+
+  Skills:        {count} created
+  Rules:         {count} created
+  CLAUDE.md:     ./CLAUDE.md
+  Outputs:       ./.claude/outputs/
+  {any other items created}
+
+```
