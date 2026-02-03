@@ -10,7 +10,7 @@
 
 # /claude-init
 
-Automatically generate a `.claude/` directory tailored for your project.
+Automatically generate Claude Code configs tailored for your project.
 
 ## Installation
 
@@ -40,7 +40,7 @@ Or, if you don't want to approve each step:
 claude --dangerously-skip-permissions /claude-init
 ```
 
-This will analyze your project and generate a tailored `.claude/` directory with [custom slash commands](https://code.claude.com/docs/en/slash-commands#custom-slash-commands), [CLAUDE.md](https://www.claude.com/blog/using-claude-md-files), and [skills](https://code.claude.com/docs/en/skills#agent-skills).
+This will analyze your project and generate a `.claude/` directory with a [CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory#claudemd), [skills](https://docs.anthropic.com/en/docs/claude-code/skills), [rules](https://docs.anthropic.com/en/docs/claude-code/memory#rules), etc.
 
 ## Use a reference repository
 
