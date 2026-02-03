@@ -82,6 +82,33 @@ Review the project's README and documentation for patterns that could work well 
 - Project-specific operations
 - etc.
 
+**IMPORTANT: Avoid creating simple wrapper commands**
+
+Do NOT create slash commands that just run a single shell command. For example:
+- ❌ `/lint` that only runs `npm run lint`
+- ❌ `/test` that only runs `npm test`
+- ❌ `/build` that only runs `npm run build`
+
+These add no value - the developer could just run the command directly. Running `claude /lint` is harder than running `npm run lint`.
+
+**A valuable slash command should leverage Claude's intelligence by doing at least one of:**
+
+- **Multi-step workflows**: Automate sequences of related actions with decision points
+- **Contextual analysis**: Read and understand code/files before acting
+- **Intelligent decisions**: Make judgment calls based on project context
+- **Content generation**: Create meaningful output (diagrams, descriptions, reports)
+- **Orchestration**: Coordinate multiple tools with branching logic
+
+**Good examples:**
+- ✅ `/generate-pr-description` - analyzes git diff, identifies ticket numbers, formats according to conventions
+- ✅ `/create-django-model` - 9-step workflow: creates model, migration, tests, factory, admin, runs tests
+- ✅ `/refactor-component [name]` - analyzes component, identifies issues, suggests improvements, applies changes
+- ✅ `/add-api-endpoint [resource]` - creates route, controller, tests, updates docs, validates against OpenAPI spec
+- ✅ `/debug-test [test-name]` - runs test, analyzes failure, reads related code, suggests fix
+- ✅ `/sync-translations` - runs the translation extraction command, then fills in missing keys matching existing tone/style
+
+**Ask yourself:** Would running this command through Claude provide more value than just running the shell command directly? If not, don't create it.
+
 For each relevant pattern found, create a new custom command using this format:
 
 ```markdown
