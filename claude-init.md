@@ -61,6 +61,13 @@ The reference argument can be:
    - Any other configuration patterns (hooks, agents, slash commands, etc.)
 6. Keep these findings as "reference configuration" to inform the rest of the process
 
+7. **Ask the user about their intent.** Before proceeding, use the `AskUserQuestion` tool to understand how they want the reference used. Present two options:
+
+   - **Copy & adapt**: Replicate the reference's configuration as closely as possible, adapting it to fit the current project's stack, paths, and conventions. Best when the reference is from a similar project or represents the user's established workflow.
+   - **Use as inspiration & go further**: Treat the reference as a starting point and source of ideas, but prioritize creating original skills and rules tailored to this project. Best when the reference is from a different kind of project or the user wants a fresh, comprehensive setup.
+
+   The user's choice shapes Steps 4–6: "Copy & adapt" means the reference is the primary source and you fill gaps; "Use as inspiration" means the reference informs your thinking but the project analysis drives the output.
+
 **If `$1` is not provided:**
 
 Skip to Step 3.
@@ -99,83 +106,97 @@ https://code.claude.com/docs/en/skills
 
 Then, create the `.claude/skills/` directory if it doesn't exist.
 
-#### Step A: Copy and adapt skills from /claude-init repository
+---
 
-The /claude-init repository provides a few example skills that are generic enough and provide a good base for this new skills folder. Fetch the list of available skills:
+**The goal of this step is to produce a set of skills that are deeply tailored to THIS project — skills that genuinely improve the developer experience and that no generic template could provide.** The claude-init repository contains a handful of example skills for inspiration, but they are intentionally generic. Your job is to go far beyond them.
+
+---
+
+#### Step A: Study example skills for inspiration (not for copying)
+
+The claude-init repository has a few generic example skills. Fetch them **in a single batch** to understand the general shape and quality bar of a good skill:
 
 ```bash
-curl -fsSL https://api.github.com/repos/Flexonze/claude-init/contents/.claude/skills
+# Fetch the directory listing and all skill files in one pass
+SKILLS=$(curl -fsSL https://api.github.com/repos/Flexonze/claude-init/contents/.claude/skills)
+echo "$SKILLS" | grep -o '"name": "[^"]*"' | sed 's/"name": "//;s/"//' | while read skill; do
+  echo "=== $skill ==="
+  curl -fsSL "https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/skills/$skill/SKILL.md"
+  echo -e "\n"
+done
 ```
 
-For each skill directory, fetch its SKILL.md:
+**How to use these examples:**
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/Flexonze/claude-init/main/.claude/skills/<skill-name>/SKILL.md
-```
+- Read them to understand structure, tone, and what a well-written SKILL.md looks like.
+- Treat them as **inspiration, not a checklist**. Most of them are generic by design and may not be relevant to this project at all.
+- If one happens to be directly useful (e.g., a git workflow skill for a project that uses git), adapt it substantially to fit this project's specific conventions, tooling, and directory structure. Never copy verbatim.
+- If none are relevant, that's fine — skip them entirely and focus on creating original skills in Step C.
 
-For each skill:
+**Do not feel obligated to include any of these.** A skill that doesn't meaningfully help the developers of _this specific project_ is just clutter.
 
-1. Read and understand what it does
-2. Check if a similar skill already exists (from reference or existing setup) - avoid duplicates
-3. Determine if it's relevant to this project
-4. If relevant, adapt it to fit the project (update examples, adjust to match how the project is run, etc.)
-5. Create the skill directory and write the adapted SKILL.md to `.claude/skills/<skill-name>/SKILL.md`
+#### Step B: Apply reference configuration (if loaded)
 
-#### Step B: Import skills from reference configuration (if loaded)
+If a reference configuration was loaded in Step 2, how you use it depends on the user's stated intent:
 
-If a reference configuration was loaded in Step 2:
+**If the user chose "Copy & adapt":**
 
-1. For each skill from the reference, evaluate if it's applicable to the current project's tech stack
-2. Adapt applicable skills to fit the current project (update commands, paths, examples)
-3. Prioritize the user's preferred workflow patterns from their reference
-4. Create the adapted skills in `.claude/skills/<skill-name>/SKILL.md`
+1. Recreate each skill from the reference, adapting it to the current project (update commands, paths, stack-specific details, examples)
+2. Preserve the reference's structure, naming, and workflow philosophy as closely as possible
+3. Fill any obvious gaps — if the current project has capabilities the reference didn't cover, add skills for those too
 
-#### Step C: Create additional project-specific skills
+**If the user chose "Use as inspiration & go further":**
 
-Be creative and thorough in identifying automation opportunities. The goal is to create a comprehensive set of skills that genuinely save developers time and effort.
+1. Review each skill from the reference to understand the kinds of workflows the user values
+2. Cherry-pick ideas that apply to this project, but rewrite them from scratch to fit this codebase
+3. Use the reference as a springboard — let it inform your thinking in Step C, but don't feel bound by it
+4. Prioritize creating original skills that address this project's specific needs over porting reference skills
 
-**Think about the full development lifecycle:**
+#### Step C: Create original, project-specific skills
 
-- Coding: What repetitive code patterns could be automated?
-- Testing: What testing workflows would benefit from Claude's intelligence?
-- Code review: How could Claude help review code or prepare PRs?
-- Documentation: What documentation tasks could be streamlined?
-- Debugging: How could Claude help diagnose and fix issues?
-- Deployment: What deployment-related workflows exist?
-- Database: Are there migration, seeding, or schema tasks?
-- Refactoring: What common refactoring patterns exist in this codebase?
-- Etc. Be creative!
+This is the most important step. The skills you create here should feel like they were hand-crafted by a senior developer who knows this codebase intimately.
 
-**Look for project-specific opportunities:**
+**Think from the developer's perspective:** What tasks in this project are tedious, error-prone, multi-step, or require context that Claude could gather automatically? Those are your best skill candidates.
 
-- Review the project's README and documentation for documented workflows
-- Look at scripts in `package.json`, `Makefile`, or similar for complex multi-step processes
-- Check for any "how to" documentation that describes manual processes
-- Identify pain points that developers likely face repeatedly
+**Explore the full development lifecycle for opportunities:**
 
-**IMPORTANT: Avoid creating simple wrapper skills**
+- **Coding**: What repetitive code patterns exist? Are there boilerplate-heavy areas (new API endpoints, new components, new modules) where Claude could scaffold correctly by reading existing examples?
+- **Testing**: What testing workflows would benefit from intelligence? (e.g., "write tests for this module by studying how similar modules are tested in this project")
+- **Code review**: Could Claude review code against this project's specific conventions? Prepare PR descriptions based on diff analysis?
+- **Documentation**: Are there docs that fall out of sync with code? Could Claude regenerate or update them?
+- **Debugging**: Are there common failure modes? Could Claude analyze logs or error traces using knowledge of the project's architecture?
+- **Deployment**: Are there multi-step deployment processes documented in READMEs or scripts?
+- **Database**: Migration generation, seed data creation, schema documentation?
+- **Refactoring**: Are there known tech debt patterns that could be systematically addressed?
+- **Dependency management**: Upgrade workflows, compatibility checks?
+- **Environment setup**: Onboarding workflows for new developers?
 
-Do NOT create skills that just run a single shell command. For example:
+**Mine the project itself for clues:**
 
-- `/lint` that only runs `npm run lint`
-- `/test` that only runs `npm test`
-- `/build` that only runs `npm run build`
+- Read scripts in `package.json`, `Makefile`, `justfile`, `Taskfile`, or similar — complex multi-step scripts are prime skill candidates
+- Check "how to" documentation, CONTRIBUTING.md, or wiki-style docs for manual processes
+- Look at CI/CD pipelines — anything the CI does could often be a useful local skill
+- Review PR templates or issue templates for recurring workflows
+- Look at git history for repeated patterns (e.g., frequent similar commits)
 
-These add no value - the developer could just run the command directly.
+**Include foundational skills, but push well beyond them.**
 
-**A valuable skill should leverage Claude's intelligence by doing at least one of:**
+It's fine to create skills for common tasks like linting, testing, or building — since Claude can invoke skills autonomously, these become useful building blocks (e.g., Claude can run lint after a refactor without being asked). But these basics are table stakes, not the goal. The real value is in skills that go further.
+
+**The best skills leverage Claude's intelligence by doing things like:**
 
 - **Multi-step workflows**: Automate sequences of related actions with decision points
 - **Contextual analysis**: Read and understand code/files before acting
 - **Intelligent decisions**: Make judgment calls based on project context
 - **Content generation**: Create meaningful output (diagrams, descriptions, reports)
 - **Orchestration**: Coordinate multiple tools with branching logic
+- **Knowledge synthesis**: Combine information from multiple parts of the codebase
 
-**Ask yourself:** Would running this skill through Claude provide more value than just running the shell command directly? If not, don't create it.
+**Ask yourself for each skill:** Does this teach Claude something about this project that it wouldn't know otherwise, or does it orchestrate a workflow that would be tedious to explain every time? If yes, it's a good skill.
 
-**Aim for comprehensiveness:** Create a significant number of meaningful skills. A well-configured project might have 5-15+ skills that cover various aspects of the development workflow.
+**Quality over quantity, but don't hold back:** A well-configured project might have 5–15+ skills. Create as many as are genuinely useful — but every single one should pass the "would a developer actually use this?" test.
 
-For each relevant pattern found, create a new skill using this format:
+For each skill, create:
 
 ```
 .claude/skills/<skill-name>/
@@ -253,7 +274,7 @@ Rules are project-specific guidelines that Claude should follow when working on 
 - **Import/export patterns**: Ordering, grouping, absolute vs relative paths
 - **Error handling**: How errors are structured, logged, and propagated
 - **Testing conventions**: Test file naming, structure, assertion styles, mocking patterns
-- **Code style**: Beyond what linters catch - architectural preferences, abstraction levels
+- **Code style**: Beyond what linters catch — architectural preferences, abstraction levels
 - **Git workflow**: Branch naming, commit message format, PR conventions
 - **Security patterns**: Input validation, authentication checks, sensitive data handling
 - **Performance guidelines**: Caching patterns, query optimization conventions
